@@ -14,11 +14,15 @@ public class HomeMainServlet3 extends HttpServlet {
 		response.setContentType("text/html; charset=UTF8");
 		
 		String inputDan = request.getParameter("dan") == null ? "1" : request.getParameter("dan");
-		int dan = Integer.parseInt(inputDan);
+		String inputLimit = request.getParameter("limit") == null ? "9" : request.getParameter("limit");
+		String inputColor = request.getParameter("color") == null ? "black" : request.getParameter("color");
 		
-		response.getWriter().append(String.format("== %d 단 ==<br>", dan));
-		for(int i = 1; i <= 9; i++) {
-			response.getWriter().append(String.format("%d * %d = %d<br>", dan, i, dan *i));
+		int dan = Integer.parseInt(inputDan);
+		int limit = Integer.parseInt(inputLimit);
+		
+		response.getWriter().append(String.format("<div style=\"color: %s;\">== %d 단 ==</div>", inputColor, dan));
+		for(int i = 1; i <= limit; i++) {
+			response.getWriter().append(String.format("<div style=\"color: %s;\">%d * %d = %d</div>", inputColor, dan, i, dan *i));
 		}
 	}
 }
