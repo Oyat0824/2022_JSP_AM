@@ -1,16 +1,17 @@
 package com.KoreaIT.java.am;
 
-import java.io.IOException;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
-@WebServlet("/home/printDan")
-public class HomePrintDanServlet extends HttpServlet {
+@WebServlet("/home/main")
+public class MainPageServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("/jsp/home/printDan.jsp").forward(request, response);
+		response.setContentType("text/html; charset=UTF-8");
+		
+		request.getRequestDispatcher("/jsp/home/main.jsp").forward(request, response);
 	}
 }
