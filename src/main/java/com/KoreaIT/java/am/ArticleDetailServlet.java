@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Map;
 
 import com.KoreaIT.java.am.util.DBUtil;
@@ -16,8 +15,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/article/list")
-public class ArticleListServlet extends HttpServlet {
+@WebServlet("/article/detail")
+public class ArticleDetailServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html; charset=UTF-8");
 		
@@ -36,14 +35,16 @@ public class ArticleListServlet extends HttpServlet {
 		try {
 			conn = DriverManager.getConnection(url, user, pw);
 			
+			int id = Integer.parseInt(request.getParameter("id"));
+
 			SecSql sql = SecSql.from("SELECT *");
-			
 			sql.append("FROM article");
+			sql.append("WHERE id = ?", id);
 			
-			List<Map<String, Object>> articleRows = DBUtil.selectRows(conn, sql);
+			Map<String, Object> articleRow = DBUtil.selectRow(conn, sql);
 			
-			request.setAttribute("articleRows", articleRows);	// request에 담아서 보냄 (key, val) 형식으로 보냄
-			request.getRequestDispatcher("/jsp/article/list.jsp").forward(request, response);
+			request.setAttribute("articleRow", articleRow);	// request에 담아서 보냄 (key, val) 형식으로 보냄
+			request.getRequestDispatcher("/jsp/article/detail.jsp").forward(request, response);
 			
 		} catch (SQLException e) {
 			System.out.println("DB 접속 에러 : " + e);

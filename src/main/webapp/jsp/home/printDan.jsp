@@ -19,7 +19,7 @@ if(inputColor == null) {
 	inputColor = "black";
 }
 
-// 가져온 파라미터 값은 String 이기에 형변환을 해줘야함
+// 가져온 파라미터 값은 String, 형변환을 해줘야함
 int dan = Integer.parseInt(inputDan);
 int limit = Integer.parseInt(inputLimit);
 %>
