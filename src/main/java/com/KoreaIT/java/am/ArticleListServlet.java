@@ -19,8 +19,10 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet("/article/list")
 public class ArticleListServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setContentType("text/html; charset=UTF-8");
+		
 		Connection conn = null;
-
+		
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
@@ -34,14 +36,14 @@ public class ArticleListServlet extends HttpServlet {
 		try {
 			conn = DriverManager.getConnection(url, user, pw);
 			
-			DBUtil dbUtil = new DBUtil();
 			SecSql sql = new SecSql();
 			
 			sql.append("SELECT * FROM article");
 			
-			List<Map<String, Object>> articleRows = dbUtil.selectRows(conn, sql);
+			List<Map<String, Object>> articleRows = DBUtil.selectRows(conn, sql);
 			
-			response.getWriter().append(articleRows.toString());
+			request.setAttribute("articleRows", articleRows);	// request에 담아서 보냄 (key, val) 형식으로 보냄
+			request.getRequestDispatcher("/jsp/article/list.jsp").forward(request, response);
 			
 		} catch (SQLException e) {
 			System.out.println("DB 접속 에러 : " + e);
