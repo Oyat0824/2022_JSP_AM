@@ -14,8 +14,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/article/doDelete")
-public class ArticleDoDeleteServlet extends HttpServlet {
+@WebServlet("/article/doWrite")
+public class ArticleDoWriteServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html; charset=UTF-8");
@@ -34,16 +34,19 @@ public class ArticleDoDeleteServlet extends HttpServlet {
 
 		try {
 			conn = DriverManager.getConnection(url, user, pw);
-
-			int id = Integer.parseInt(request.getParameter("id"));
-
-			SecSql sql = SecSql.from("DELETE");
-			sql.append("FROM article");
-			sql.append("WHERE id = ?", id);
 			
-			DBUtil.delete(conn, sql);
+			// 게시글 작성
+			String title = request.getParameter("title");
+			String body = request.getParameter("body");
+
+			SecSql sql = SecSql.from("INSERT INTO article");
+			sql.append("SET regDate = NOW()");
+			sql.append(", title = ?", title);
+			sql.append(", `body` = ?", body);
 			
-			response.getWriter().append(String.format("<script>alert('%d번 게시글이 삭제되었습니다!'); location.replace('list');</script>)", id));
+			int lastId = DBUtil.insert(conn, sql);
+			
+			response.getWriter().append(String.format("<script>alert('%d번 게시글 작성 완료!'); location.replace('list');</script>)", lastId));
 			
 		} catch (SQLException e) {
 			System.out.println("DB 접속 에러 : " + e);

@@ -17,6 +17,11 @@ int totalPage = (int)request.getAttribute("totalPage");
 <meta charset="UTF-8">
 <title>게시물 리스트</title>
 <style type="text/css">
+	.page {
+		margin: 20px auto;
+		text-align: center;
+	}
+	
 	.page > a.red {
 		color: red;
 		font-weight: bold;
@@ -25,11 +30,13 @@ int totalPage = (int)request.getAttribute("totalPage");
 </head>
 <body>
 	<h1>게시물 리스트</h1>
-	<table border="2" bordercolor="#999" cellspacing="0" cellpadding="5">
+	<button onclick="location.href='write'">게시물 작성</button>
+	<table width="100%" border="2" bordercolor="#999" cellspacing="0" cellpadding="5">
 		<colgroup>
 			<col width="50" />
-			<col width="150" />
+			<col width="auto" />
 			<col width="200" />
+			<col width="50" />
 		</colgroup>
 		
 		<tr>
@@ -50,9 +57,11 @@ int totalPage = (int)request.getAttribute("totalPage");
 	</table>
 	
 	<div class="page">
+		<a href="list?page=<%=curPage == 1 ? curPage : curPage-1%>">◀</a>
 		<% for(int i = 1; i <= totalPage; i++) { %>
 			<a class="<%= curPage == i ? "red" : "" %>" href="list?page=<%= i %>"><%= i %></a>
 		<% } %>
+		<a href="list?page=<%=curPage == totalPage ? curPage : curPage+1%>">▶</a>
 	</div>
 </body>
 
