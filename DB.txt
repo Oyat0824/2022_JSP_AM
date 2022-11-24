@@ -11,8 +11,22 @@ CREATE TABLE article(
 	`body` TEXT NOT NULL
 );
 
+# member 테이블 생성
+CREATE TABLE `member`(
+	id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	regDate DATETIME NOT NULL,
+	loginId VARCHAR(20) NOT NULL,
+	loginPw VARCHAR(40) NOT NULL,
+	`name` VARCHAR(20) NOT NULL
+);
+
 # article 테이블 조회
 SELECT * FROM article;
+
+SELECT COUNT(id) FROM article;
+
+# member 테이블 조회
+SELECT * FROM `member`;
 
 # article 데이터 추가
 INSERT INTO article
@@ -29,3 +43,10 @@ INSERT INTO article
 SET regDate = NOW(),
 title = 'test3',
 `body` = 'test3';
+
+INSERT INTO article
+SET regDate = NOW(),
+title = 'test4',
+`body` = 'test4';
+
+SELECT id FROM article ORDER BY id DESC LIMIT 1;

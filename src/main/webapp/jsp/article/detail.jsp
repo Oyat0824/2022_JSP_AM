@@ -21,9 +21,9 @@ Map<String, Object> articleRow = (Map<String, Object>)request.getAttribute("arti
 	<div>제목 : <%= (String)articleRow.get("title") %></div>
 	<div>내용 : <%= (String)articleRow.get("body") %></div>
 	
-	<button onclick="location.href='list'">목록</button>
-	<button onclick="location.href='modify?id=<%= (int)articleRow.get("id") %>'">수정</button>
-	<button onclick="deleteChk(<%= (int)articleRow.get("id") %>)">삭제</button>
+	<button type="button" onclick="location.href='list'">목록</button>
+	<button type="button" onclick="location.href='modify?id=<%= (int)articleRow.get("id") %>'">수정</button>
+	<button type="button" onclick="deleteChk(<%= (int)articleRow.get("id") %>)">삭제</button>
 </body>
 <script>
 function deleteChk(id) {

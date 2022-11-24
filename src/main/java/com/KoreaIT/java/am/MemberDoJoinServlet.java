@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Map;
 
 import com.KoreaIT.java.am.config.Config;
 import com.KoreaIT.java.am.exception.SQLErrorException;
@@ -17,14 +16,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/article/detail")
-public class ArticleDetailServlet extends HttpServlet {
+@WebServlet("/member/doJoin")
+public class MemberDoJoinServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html; charset=UTF-8");
-		
+
 		Connection conn = null;
-		
+
 		try {
 			Class.forName(Config.getDBDriverClassName() );
 		} catch (ClassNotFoundException e) {
@@ -34,16 +33,20 @@ public class ArticleDetailServlet extends HttpServlet {
 		try {
 			conn = DriverManager.getConnection(Config.getDBUrl(), Config.getDBUser(), Config.getDBPassword() );
 			
-			int id = Integer.parseInt(request.getParameter("id"));
+			// 회원 정보
+			String loginId = request.getParameter("loginId");
+			String loginPw = request.getParameter("loginPw");
+			String name = request.getParameter("name");
 
-			SecSql sql = SecSql.from("SELECT *");
-			sql.append("FROM article");
-			sql.append("WHERE id = ?", id);
+			SecSql sql = SecSql.from("INSERT INTO `member`");
+			sql.append("SET regDate = NOW()");
+			sql.append(", loginId = ?", loginId);
+			sql.append(", loginPw = ?", loginPw);
+			sql.append(", `name` = ?", name);
 			
-			Map<String, Object> articleRow = DBUtil.selectRow(conn, sql);
+			int lastId = DBUtil.insert(conn, sql);
 			
-			request.setAttribute("articleRow", articleRow);	// request에 담아서 보냄 (key, val) 형식으로 보냄
-			request.getRequestDispatcher("/jsp/article/detail.jsp").forward(request, response);
+			response.getWriter().append(String.format("<script>alert('%d번 회원 가입 완료!'); location.replace('../home/main');</script>)", lastId));
 			
 		} catch (SQLException e) {
 			System.out.println("DB 접속 에러 : " + e);

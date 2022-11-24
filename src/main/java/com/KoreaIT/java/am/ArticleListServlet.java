@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import com.KoreaIT.java.am.config.Config;
+import com.KoreaIT.java.am.exception.SQLErrorException;
 import com.KoreaIT.java.am.util.DBUtil;
 import com.KoreaIT.java.am.util.SecSql;
 
@@ -25,17 +27,13 @@ public class ArticleListServlet extends HttpServlet {
 		Connection conn = null;
 		
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
+			Class.forName(Config.getDBDriverClassName() );
 		} catch (ClassNotFoundException e) {
 			System.out.println("JDBC 드라이버 로딩 실패");
 		}
 
-		String url = "jdbc:mysql://localhost:3306/JSPTest?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true&zeroDateTimeNehavior=convertToNull";
-		String user = "root";
-		String pw = "";
-
 		try {
-			conn = DriverManager.getConnection(url, user, pw);
+			conn = DriverManager.getConnection(Config.getDBUrl(), Config.getDBUser(), Config.getDBPassword() );
 			
 			// 페이지 파라미터 관련
 			int page = 1;
@@ -71,6 +69,8 @@ public class ArticleListServlet extends HttpServlet {
 			
 		} catch (SQLException e) {
 			System.out.println("DB 접속 에러 : " + e);
+		} catch (SQLErrorException e) {
+			e.getOrigin().printStackTrace();
 		} finally {
 			try {
 				if (conn != null && !conn.isClosed()) {

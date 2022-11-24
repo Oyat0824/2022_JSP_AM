@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import com.KoreaIT.java.am.config.Config;
+import com.KoreaIT.java.am.exception.SQLErrorException;
 import com.KoreaIT.java.am.util.DBUtil;
 import com.KoreaIT.java.am.util.SecSql;
 
@@ -23,17 +25,13 @@ public class ArticleDoWriteServlet extends HttpServlet {
 		Connection conn = null;
 
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
+			Class.forName(Config.getDBDriverClassName() );
 		} catch (ClassNotFoundException e) {
 			System.out.println("JDBC 드라이버 로딩 실패");
 		}
 
-		String url = "jdbc:mysql://localhost:3306/JSPTest?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true&zeroDateTimeNehavior=convertToNull";
-		String user = "root";
-		String pw = "";
-
 		try {
-			conn = DriverManager.getConnection(url, user, pw);
+			conn = DriverManager.getConnection(Config.getDBUrl(), Config.getDBUser(), Config.getDBPassword() );
 			
 			// 게시글 작성
 			String title = request.getParameter("title");
@@ -50,6 +48,8 @@ public class ArticleDoWriteServlet extends HttpServlet {
 			
 		} catch (SQLException e) {
 			System.out.println("DB 접속 에러 : " + e);
+		} catch (SQLErrorException e) {
+			e.getOrigin().printStackTrace();
 		} finally {
 			try {
 				if (conn != null && !conn.isClosed()) {
