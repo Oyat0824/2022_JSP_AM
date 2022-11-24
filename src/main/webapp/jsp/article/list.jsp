@@ -51,25 +51,34 @@ int totalPage = (int)request.getAttribute("totalPage");
 			<td><%= (int)articleRow.get("id") %></td>
 			<td><a href="detail?id=<%=(int)articleRow.get("id")%>"><%= (String)articleRow.get("title") %></a></td>
 			<td><%= (LocalDateTime)articleRow.get("regDate") %></td>
-			<td><a href="javascript:void(0)" onclick="doDelete(<%= (int)articleRow.get("id") %>)">삭제</a></td>
+			<td><a href="doDelete?id=<%=(int)articleRow.get("id")%>" onclick="if(confirm('삭제하시겠습니까?') == false) return false;">삭제</a></td>
 		</tr>
 		<% } %>
 	</table>
 	
 	<div class="page">
+		<% if(curPage > 1) { %>
+			<a href="list?page=<%=1%>">&lt;&lt;</a> 
+		<% } %>
 		<a href="list?page=<%=curPage == 1 ? curPage : curPage-1%>">◀</a>
-		<% for(int i = 1; i <= totalPage; i++) { %>
+		
+		<% 
+		int pageSize = 5;
+		int from = curPage - pageSize;
+		if(from < 1) from = 1;
+
+		int end = curPage + pageSize;
+		if(end > totalPage) end = totalPage;
+
+		for(int i = from; i <= end; i++) {
+		%>
 			<a class="<%= curPage == i ? "red" : "" %>" href="list?page=<%= i %>"><%= i %></a>
 		<% } %>
+		
 		<a href="list?page=<%=curPage == totalPage ? curPage : curPage+1%>">▶</a>
+		<% if(curPage < totalPage) { %>
+			<a href="list?page=<%=totalPage%>">&gt;&gt;</a>
+		<% } %>
 	</div>
 </body>
-
-<script type="text/javascript">
-function doDelete(id) {
-	if(confirm("삭제하시겠습니까?")) {
-		location.href="doDelete?id="+id;
-	}
-}
-</script>
 </html>

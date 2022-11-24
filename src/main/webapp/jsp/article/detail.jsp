@@ -23,13 +23,13 @@ Map<String, Object> articleRow = (Map<String, Object>)request.getAttribute("arti
 	
 	<button onclick="location.href='list'">목록</button>
 	<button onclick="location.href='modify?id=<%= (int)articleRow.get("id") %>'">수정</button>
-	<button onclick="doDelete(<%= (int)articleRow.get("id") %>)">삭제</button>
-	
-	
+	<button onclick="deleteChk(<%= (int)articleRow.get("id") %>)">삭제</button>
 </body>
-<script type="text/javascript">
-function doDelete(id) {
-	if(confirm("삭제하시겠습니까?")) {
+<script>
+function deleteChk(id) {
+	if(confirm('삭제하시겠습니까?') == false) {
+		return false;
+	} else {
 		location.href="doDelete?id="+id;
 	}
 }
