@@ -7,6 +7,7 @@ USE JSPTest;
 CREATE TABLE article(
 	id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	regDate DATETIME NOT NULL,
+	memberId INT UNSIGNED NOT NULL,
 	title VARCHAR(200) NOT NULL,
 	`body` TEXT NOT NULL
 );
@@ -15,38 +16,71 @@ CREATE TABLE article(
 CREATE TABLE `member`(
 	id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	regDate DATETIME NOT NULL,
-	loginId VARCHAR(20) NOT NULL,
+	loginId VARCHAR(20) UNIQUE NOT NULL,
 	loginPw VARCHAR(40) NOT NULL,
 	`name` VARCHAR(20) NOT NULL
 );
 
 # article 테이블 조회
 SELECT * FROM article;
+DESC article;
 
 SELECT COUNT(id) FROM article;
 
 # member 테이블 조회
 SELECT * FROM `member`;
+DESC `member`;
 
 # article 데이터 추가
 INSERT INTO article
 SET regDate = NOW(),
+memberId = 1,
 title = 'test1',
 `body` = 'test1';
 
 INSERT INTO article
 SET regDate = NOW(),
+memberId = 2,
 title = 'test2',
 `body` = 'test2';
 
 INSERT INTO article
 SET regDate = NOW(),
+memberId = 3,
 title = 'test3',
 `body` = 'test3';
 
 INSERT INTO article
 SET regDate = NOW(),
+memberId = 1,
 title = 'test4',
 `body` = 'test4';
 
+# member 데이터 추가
+INSERT INTO `member`
+SET regDate = NOW(),
+loginId = 'test1',
+loginPw = 'test1',
+`name` = '유저1';
+
+INSERT INTO `member`
+SET regDate = NOW(),
+loginId = 'test2',
+loginPw = 'test2',
+`name` = '유저2';
+
+INSERT INTO `member`
+SET regDate = NOW(),
+loginId = 'test3',
+loginPw = 'test3',
+`name` = '유저3';
+
 SELECT id FROM article ORDER BY id DESC LIMIT 1;
+
+# 이너 조인
+SELECT A.*, M.name AS WriterName
+FROM article AS A
+INNER JOIN `member` AS M
+ON A.memberId = M.id
+ORDER BY A.id DESC
+LIMIT 0, 10;

@@ -33,26 +33,25 @@ int totalPage = (int)request.getAttribute("totalPage");
 	<button type="button" onclick="location.href='../home/main'">메인화면</button>
 	<button type="button" onclick="location.href='write'">게시물 작성</button>
 	<table width="100%" border="2" bordercolor="#999" cellspacing="0" cellpadding="5">
-		<colgroup>
-			<col width="50" />
-			<col width="auto" />
-			<col width="200" />
-			<col width="50" />
-		</colgroup>
-		
+	<colgroup>
+		<col width="50px" />
+		<col width="150px" />
+		<col width="80px" />
+		<col width="200px" />
+	</colgroup>
 		<tr>
 			<th>번호</th>
 			<th>제목</th>
+			<th>작성자</th>
 			<th>날짜</th>
-			<th>삭제</th>
 		</tr>
 		
 		<% for(Map<String, Object> articleRow : articleRows) { %>
 		<tr>
 			<td><%= (int)articleRow.get("id") %></td>
 			<td><a href="detail?id=<%=(int)articleRow.get("id")%>"><%= (String)articleRow.get("title") %></a></td>
+			<td><%= (String)articleRow.get("WriterName") %></td>
 			<td><%= (LocalDateTime)articleRow.get("regDate") %></td>
-			<td><a href="doDelete?id=<%=(int)articleRow.get("id")%>" onclick="if(confirm('삭제하시겠습니까?') == false) return false;">삭제</a></td>
 		</tr>
 		<% } %>
 	</table>
