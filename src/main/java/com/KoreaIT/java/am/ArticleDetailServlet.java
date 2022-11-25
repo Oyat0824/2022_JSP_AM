@@ -16,6 +16,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet("/article/detail")
 public class ArticleDetailServlet extends HttpServlet {
@@ -33,6 +34,21 @@ public class ArticleDetailServlet extends HttpServlet {
 
 		try {
 			conn = DriverManager.getConnection(Config.getDBUrl(), Config.getDBUser(), Config.getDBPassword() );
+			
+			HttpSession session = request.getSession();
+			
+			boolean isLogined = false;
+			int loginedMemberId = -1;
+			String loginedMemberName = (String) session.getAttribute("loginedMemberName");
+			
+			if(session.getAttribute("loginedMemberLoginId") != null) {
+				isLogined = true;
+				loginedMemberId = (int)session.getAttribute("loginedMemberId");
+			}
+			
+			request.setAttribute("isLogined", isLogined);
+			request.setAttribute("loginedMemberId", loginedMemberId);
+			request.setAttribute("loginedMemberName", loginedMemberName);
 			
 			int id = Integer.parseInt(request.getParameter("id"));
 			

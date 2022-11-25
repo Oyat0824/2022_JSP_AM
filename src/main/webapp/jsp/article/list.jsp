@@ -29,6 +29,7 @@ int totalPage = (int)request.getAttribute("totalPage");
 </style>
 </head>
 <body>
+	<%@ include file="../part/topBar.jsp" %>
 	<h1>게시물 리스트</h1>
 	<button type="button" onclick="location.href='../home/main'">메인화면</button>
 	<button type="button" onclick="location.href='write'">게시물 작성</button>

@@ -15,6 +15,7 @@ Map<String, Object> articleRow = (Map<String, Object>)request.getAttribute("arti
 <title>게시물 상세보기</title>
 </head>
 <body>
+	<%@ include file="../part/topBar.jsp" %>
 	<h1><%= (int)articleRow.get("id") %>번 게시물</h1>
 	<div>번호 : <%= (int)articleRow.get("id") %> 번</div>
 	<div>날짜 : <%= (LocalDateTime)articleRow.get("regDate") %></div>
