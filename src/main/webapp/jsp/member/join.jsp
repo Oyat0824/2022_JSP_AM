@@ -10,10 +10,10 @@
 <body>
 	<h1>회원가입</h1>
 	<form action="doJoin" method="post" onsubmit="JoinFormSubmit(this); return false">
-		<label>아이디 : <input type="text" name="loginId" placeholder="아이디" /></label><br /><br />
+		<label>아이디 : <input type="text" autocomplete="off" name="loginId" placeholder="아이디" /></label><br /><br />
 		<label>비밀번호 : <input type="password" name="loginPw" placeholder="비밀번호" /></label><br /><br />
 		<label>비밀번호 확인: <input type="password" name="loginPwChk" placeholder="비밀번호 확인" /></label><br /><br />
-		<label>이름: <input type="text" name="name" placeholder="이름" /></label><br /><br />
+		<label>이름: <input type="text" autocomplete="off" name="name" placeholder="이름" /></label><br /><br />
 		
 		<button type="submit">가입</button>
 		<button type="reset">초기화</button>

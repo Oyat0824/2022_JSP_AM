@@ -30,6 +30,7 @@ int totalPage = (int)request.getAttribute("totalPage");
 </head>
 <body>
 	<h1>게시물 리스트</h1>
+	<button type="button" onclick="location.href='../home/main'">메인화면</button>
 	<button type="button" onclick="location.href='write'">게시물 작성</button>
 	<table width="100%" border="2" bordercolor="#999" cellspacing="0" cellpadding="5">
 		<colgroup>
