@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Map;
 
 import com.KoreaIT.java.am.config.Config;
+import com.KoreaIT.java.am.controller.ArticleController;
 import com.KoreaIT.java.am.exception.SQLErrorException;
 import com.KoreaIT.java.am.util.DBUtil;
 import com.KoreaIT.java.am.util.SecSql;
@@ -19,11 +19,22 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-@WebServlet("/article/list")
-public class ArticleListServlet extends HttpServlet {
+@WebServlet("/s/*")
+public class DispatcherServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// 인코딩 관련 세팅
+		request.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html; charset=UTF-8");
+		
+		// URL 검증
+		String requestUri = request.getRequestURI();
+		String[] requestUriBits = requestUri.split("/");
+		
+		if(requestUriBits.length < 5) {
+			response.getWriter().append("올바른 요청이 아닙니다.");
+			return;
+		}
 		
 		Connection conn = null;
 		
@@ -36,6 +47,7 @@ public class ArticleListServlet extends HttpServlet {
 		try {
 			conn = DriverManager.getConnection(Config.getDBUrl(), Config.getDBUser(), Config.getDBPassword() );
 			
+			// 로그인 정보 전송
 			HttpSession session = request.getSession();
 			
 			boolean isLogined = false;
@@ -51,39 +63,17 @@ public class ArticleListServlet extends HttpServlet {
 			request.setAttribute("loginedMemberId", loginedMemberId);
 			request.setAttribute("loginedMemberName", loginedMemberName);
 			
-			// 페이지 파라미터 관련
-			int page = 1;
-			if (request.getParameter("page") != null && request.getParameter("page").length() != 0) {
-				page = Integer.parseInt(request.getParameter("page"));
+			// 분기에 따른 전송
+			String controllerName = requestUriBits[3];
+			String actionMethodName = requestUriBits[4];
+			
+			if(controllerName.equals("article")) {
+				ArticleController articleController = new ArticleController(request, response, conn);
+				
+				if(actionMethodName.equals("list")) {
+					articleController.showList();
+				}
 			}
-			
-			// 페이지 관련 변수
-			int itemsInAPage = 10;
-			int limitFrom = (page - 1) * itemsInAPage;
-			
-			// 게시글 개수
-			SecSql sql = SecSql.from("SELECT COUNT(id)");
-			sql.append("FROM article");
-			
-			// 개시글 개수에 따른 페이지 수 구하기
-			int totalCount = DBUtil.selectRowIntValue(conn, sql);
-			int totalPage = (int)Math.ceil((double)totalCount / itemsInAPage);
-			
-			// 게시글 목록 가져오기
-			sql = SecSql.from("SELECT A.*, M.name AS WriterName");
-			sql.append("FROM article AS A");
-			sql.append("INNER JOIN `member` AS M");
-			sql.append("ON A.memberId = M.id");
-			sql.append("ORDER BY A.id DESC");
-			sql.append("LIMIT ?, ?", limitFrom, itemsInAPage);
-			
-			List<Map<String, Object>> articleRows = DBUtil.selectRows(conn, sql);
-			
-			// 리퀘스트에 담아서 보내기
-			request.setAttribute("page", page);
-			request.setAttribute("totalPage", totalPage);
-			request.setAttribute("articleRows", articleRows);	// request에 담아서 보냄 (key, val) 형식으로 보냄
-			request.getRequestDispatcher("/jsp/article/list.jsp").forward(request, response);
 			
 		} catch (SQLException e) {
 			System.out.println("DB 접속 에러 : " + e);
