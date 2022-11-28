@@ -1,5 +1,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
+<%@ page import="com.KoreaIT.java.am.dto.Article" %>
 <%@ page import="java.time.LocalDateTime" %>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -7,7 +8,7 @@
 
 <%
 // (자료형 지정)request.꺼내오기(키값)
-List<Map<String, Object>> articleRows = (List<Map<String, Object>>)request.getAttribute("articleRows");
+List<Article> articles = (List<Article>)request.getAttribute("articles");
 int curPage = (int)request.getAttribute("page");
 int totalPage = (int)request.getAttribute("totalPage");
 %>
@@ -47,12 +48,12 @@ int totalPage = (int)request.getAttribute("totalPage");
 			<th>날짜</th>
 		</tr>
 		
-		<% for(Map<String, Object> articleRow : articleRows) { %>
+		<% for(Article article : articles) { %>
 		<tr>
-			<td><%= (int)articleRow.get("id") %></td>
-			<td><a href="detail?id=<%=(int)articleRow.get("id")%>"><%= (String)articleRow.get("title") %></a></td>
-			<td><%= (String)articleRow.get("WriterName") %></td>
-			<td><%= (LocalDateTime)articleRow.get("regDate") %></td>
+			<td><%= (int) article.id %></td>
+			<td><a href="detail?id=<%= (int) article.id %>"><%= (String) article.title %></a></td>
+			<td><%= (String) article.writerName %></td>
+			<td><%= (LocalDateTime) article.regDate %></td>
 		</tr>
 		<% } %>
 	</table>

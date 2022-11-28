@@ -47,7 +47,7 @@ public class DispatcherServlet extends HttpServlet {
 		try {
 			conn = DriverManager.getConnection(Config.getDBUrl(), Config.getDBUser(), Config.getDBPassword() );
 			
-			// 로그인 정보 전송
+			// 로그인 정보 검사
 			HttpSession session = request.getSession();
 			
 			boolean isLogined = false;
